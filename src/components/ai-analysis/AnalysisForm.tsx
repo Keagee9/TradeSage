@@ -11,7 +11,8 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Loader2, Sparkles } from "lucide-react";
 import type { AnalyzeTradeOpportunityOutput } from "@/ai/flows/analyze-trade-opportunity";
-import { AnalysisFormInputSchema, AnalysisFormInput, getAiTradeAnalysis } from "@/app/ai-analysis/actions";
+import { getAiTradeAnalysis } from "@/app/ai-analysis/actions";
+import { AnalysisFormInputSchema, type AnalysisFormInput } from "@/app/ai-analysis/schemas";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from '@/components/ui/badge';
 import { X } from 'lucide-react';
