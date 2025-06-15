@@ -3,6 +3,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -13,6 +14,9 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Loader2, LogIn } from "lucide-react";
 import { LogoIcon } from '@/components/icons/LogoIcon';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '@/lib/firebase';
+import { useToast } from "@/hooks/use-toast";
 
 const LoginFormSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email address." }),
@@ -23,6 +27,8 @@ type LoginFormInput = z.infer<typeof LoginFormSchema>;
 
 export function LoginForm() {
   const [isLoading, setIsLoading] = React.useState(false);
+  const router = useRouter();
+  const { toast } = useToast();
 
   const form = useForm<LoginFormInput>({
     resolver: zodResolver(LoginFormSchema),
@@ -34,12 +40,29 @@ export function LoginForm() {
 
   async function onSubmit(values: LoginFormInput) {
     setIsLoading(true);
-    console.log("Login form submitted:", values);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    setIsLoading(false);
-    // Here you would typically redirect or handle auth state
-    // For now, just log and reset loading
+    try {
+      await signInWithEmailAndPassword(auth, values.email, values.password);
+      toast({
+        title: "Login Successful",
+        description: "Redirecting...",
+      });
+      router.push('/dashboard'); // Or potentially a redirect based on previous page
+    } catch (error: any) {
+      console.error("Login error:", error);
+      let errorMessage = "An unexpected error occurred. Please try again.";
+      if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
+        errorMessage = "Invalid email or password."
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      toast({
+        variant: "destructive",
+        title: "Login Failed",
+        description: errorMessage,
+      });
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
