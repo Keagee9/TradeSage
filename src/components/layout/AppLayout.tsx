@@ -19,6 +19,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { LayoutDashboard, LineChart, Star, BrainCircuit, Settings, LogOut, ShieldCheck } from 'lucide-react';
 import { NavLink } from './NavLink';
 import { LogoIcon } from '../icons/LogoIcon';
+import Link from 'next/link';
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
   const [mounted, setMounted] = React.useState(false);
@@ -103,8 +104,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
         <header className="sticky top-0 z-10 flex h-14 items-center justify-between gap-4 border-b bg-background/80 backdrop-blur-sm px-6">
           <SidebarTrigger className="md:hidden" />
           <h2 className="text-lg font-semibold">TradeSage</h2>
-           {/* Example of a simple auth link - not part of the full auth flow yet */}
-          <Link href="/auth/login" legacyBehavior>
+          <Link href="/auth/login">
             <Button variant="outline" size="sm">Login</Button>
           </Link>
         </header>
@@ -115,6 +115,3 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
     </SidebarProvider>
   );
 }
-
-// Added Link import for the simple auth link in header
-import Link from 'next/link';
