@@ -25,9 +25,13 @@ import { auth } from '@/lib/firebase';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 
+// Hardcoded admin email - replace with proper role management (e.g., Firebase Custom Claims)
+const ADMIN_EMAIL = "admin@tradesage.com";
+
 export function AppLayout({ children }: { children: React.ReactNode }) {
   const [mounted, setMounted] = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState<User | null>(null);
+  const [isAdmin, setIsAdmin] = React.useState(false);
   const [authLoading, setAuthLoading] = React.useState(true);
   const router = useRouter();
   const { toast } = useToast();
@@ -36,6 +40,11 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
     setMounted(true);
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
+      if (user && user.email === ADMIN_EMAIL) {
+        setIsAdmin(true);
+      } else {
+        setIsAdmin(false);
+      }
       setAuthLoading(false);
     });
     return () => unsubscribe();
@@ -48,6 +57,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
         title: "Logged Out",
         description: "You have been successfully logged out.",
       });
+      setIsAdmin(false); // Reset admin status on logout
       router.push('/auth/login');
     } catch (error: any) {
       console.error("Logout error:", error);
@@ -102,11 +112,13 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
                 AI Analysis
               </NavLink>
             </SidebarMenuItem>
-             <SidebarMenuItem>
-              <NavLink href="/admin" icon={ShieldCheck} tooltip="Admin Panel">
-                Admin
-              </NavLink>
-            </SidebarMenuItem>
+            {isAdmin && (
+              <SidebarMenuItem>
+                <NavLink href="/admin" icon={ShieldCheck} tooltip="Admin Panel">
+                  Admin
+                </NavLink>
+              </SidebarMenuItem>
+            )}
           </SidebarMenu>
         </SidebarContent>
         <SidebarSeparator />
