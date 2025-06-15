@@ -13,6 +13,10 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Loader2, UserPlus } from "lucide-react";
 import { LogoIcon } from '@/components/icons/LogoIcon';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '@/lib/firebase';
+import { useRouter } from 'next/navigation';
+import { useToast } from "@/hooks/use-toast";
 
 const SignupFormSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
@@ -28,6 +32,8 @@ type SignupFormInput = z.infer<typeof SignupFormSchema>;
 
 export function SignupForm() {
   const [isLoading, setIsLoading] = React.useState(false);
+  const router = useRouter();
+  const { toast } = useToast();
 
   const form = useForm<SignupFormInput>({
     resolver: zodResolver(SignupFormSchema),
@@ -41,11 +47,33 @@ export function SignupForm() {
 
   async function onSubmit(values: SignupFormInput) {
     setIsLoading(true);
-    console.log("Signup form submitted:", values);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    setIsLoading(false);
-    // Here you would typically redirect or handle auth state
+    try {
+      // Note: 'name' is collected but not directly used by createUserWithEmailAndPassword.
+      // You'd typically store it in Firestore or update the user's profile separately.
+      await createUserWithEmailAndPassword(auth, values.email, values.password);
+      toast({
+        title: "Signup Successful",
+        description: "Your account has been created. Redirecting...",
+      });
+      router.push('/dashboard'); 
+    } catch (error: any) {
+      console.error("Signup error:", error);
+      let errorMessage = "An unexpected error occurred. Please try again.";
+      if (error.code === 'auth/email-already-in-use') {
+        errorMessage = "This email address is already in use.";
+      } else if (error.code === 'auth/weak-password') {
+        errorMessage = "The password is too weak. Please choose a stronger password.";
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      toast({
+        variant: "destructive",
+        title: "Signup Failed",
+        description: errorMessage,
+      });
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
