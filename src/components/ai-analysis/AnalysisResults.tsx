@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { TrendingUp, TrendingDown, MinusCircle, AlertTriangle, Info } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
+import { Label } from "@/components/ui/label";
 
 interface AnalysisResultsProps {
   results: AnalyzeTradeOpportunityOutput | null;
