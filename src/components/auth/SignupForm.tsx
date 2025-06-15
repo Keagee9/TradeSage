@@ -52,10 +52,10 @@ export function SignupForm() {
       // You'd typically store it in Firestore or update the user's profile separately.
       await createUserWithEmailAndPassword(auth, values.email, values.password);
       toast({
-        title: "Signup Successful",
-        description: "Your account has been created. Redirecting...",
+        title: "Signup Complete!",
+        description: "Your account has been created. Please log in.",
       });
-      router.push('/dashboard'); 
+      router.push('/auth/login'); 
     } catch (error: any) {
       console.error("Signup error:", error);
       let errorMessage = "An unexpected error occurred. Please try again.";
@@ -160,4 +160,3 @@ export function SignupForm() {
     </Card>
   );
 }
-
