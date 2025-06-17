@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 
 export default function HomePage() {
-  redirect('/dashboard');
+  redirect('/landing');
   return null; // redirect() throws an error, so this won't be reached
 }
