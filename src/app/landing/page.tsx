@@ -68,7 +68,7 @@ export default function LandingPage() {
                     width={1000}
                     height={600}
                     className="rounded-xl shadow-2xl mx-auto ring-1 ring-border/50"
-                    data-ai-hint="trading dashboard graph"
+                    data-ai-hint="trading dashboard"
                     priority
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent opacity-50"></div>
