@@ -63,10 +63,10 @@ export default function LandingPage() {
             </div>
             <div className="mt-12 md:mt-16 relative">
                 <Image
-                    src="https://placehold.co/1000x600.png"
+                    src="https://placehold.co/960x540.png"
                     alt="TradeSage Dashboard Mockup"
-                    width={1000}
-                    height={600}
+                    width={960}
+                    height={540}
                     className="rounded-xl shadow-2xl mx-auto ring-1 ring-border/50"
                     data-ai-hint="trading dashboard"
                     priority
