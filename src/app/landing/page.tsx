@@ -28,11 +28,8 @@ export default function LandingPage() {
             </Link>
           </nav>
           <div className="flex flex-1 items-center justify-end space-x-2">
-            <Button variant="ghost" asChild>
-              <Link href="/auth/login">Log In</Link>
-            </Button>
-            <Button asChild>
-              <Link href="/auth/signup">Sign Up <ArrowRight className="ml-2 h-4 w-4" /></Link>
+             <Button asChild>
+              <Link href="/dashboard">Go to App</Link>
             </Button>
           </div>
         </div>
@@ -52,8 +49,8 @@ export default function LandingPage() {
               </p>
               <div className="mt-10 flex items-center justify-center gap-x-6">
                 <Button size="lg" asChild className="shadow-lg hover:shadow-primary/30 transition-shadow">
-                  <Link href="/auth/signup">
-                    Get Started Free <TrendingUp className="ml-2 h-5 w-5" />
+                  <Link href="/dashboard">
+                    Launch App <TrendingUp className="ml-2 h-5 w-5" />
                   </Link>
                 </Button>
                 <Button size="lg" variant="outline" asChild>
@@ -138,8 +135,8 @@ export default function LandingPage() {
             </p>
             <div className="mt-8">
               <Button size="lg" asChild className="shadow-lg hover:shadow-primary/30 transition-shadow">
-                <Link href="/auth/signup">
-                  Sign Up Now and Start Trading <ArrowRight className="ml-2 h-5 w-5" />
+                <Link href="/dashboard">
+                  Launch the App Now <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
             </div>
