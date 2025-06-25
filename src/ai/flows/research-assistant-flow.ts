@@ -11,9 +11,9 @@
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
-export const ResearchTradeOpportunityInputSchema = z.object({
+const ResearchTradeOpportunityInputSchema = z.object({
   asset: z.string().describe('The crypto or forex pair being researched.'),
-  query: z.string().describe('The user\'s primary question or research goal.'),
+  query: z.string().describe("The user's primary question or research goal."),
   documentText: z
     .string()
     .optional()
@@ -29,18 +29,18 @@ export const ResearchTradeOpportunityInputSchema = z.object({
   newsFeeds: z
     .array(z.string())
     .optional()
-    .describe(
-      'An array of recent news articles related to the asset.'
-    ),
+    .describe('An array of recent news articles related to the asset.'),
 });
 export type ResearchTradeOpportunityInput = z.infer<
   typeof ResearchTradeOpportunityInputSchema
 >;
 
-export const ResearchTradeOpportunityOutputSchema = z.object({
+const ResearchTradeOpportunityOutputSchema = z.object({
   summary: z
     .string()
-    .describe('A concise summary of the analysis, synthesizing all provided information.'),
+    .describe(
+      'A concise summary of the analysis, synthesizing all provided information.'
+    ),
   recommendation: z
     .enum(['buy', 'sell', 'hold', 'no-clear-signal'])
     .describe('The recommended trading action based on the analysis.'),
@@ -53,9 +53,7 @@ export const ResearchTradeOpportunityOutputSchema = z.object({
     .number()
     .min(0)
     .max(1)
-    .describe(
-      'A confidence score (from 0 to 1) for the recommendation.'
-    ),
+    .describe('A confidence score (from 0 to 1) for the recommendation.'),
 });
 export type ResearchTradeOpportunityOutput = z.infer<
   typeof ResearchTradeOpportunityOutputSchema
