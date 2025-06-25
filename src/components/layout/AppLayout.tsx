@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { LayoutDashboard, LineChart, Star, BrainCircuit, Settings, LogOut, ShieldCheck, Loader2, LogIn } from 'lucide-react';
+import { LayoutDashboard, LineChart, Star, BrainCircuit, Settings, LogOut, ShieldCheck, Loader2, LogIn, FlaskConical } from 'lucide-react';
 import { NavLink } from './NavLink';
 import { LogoIcon } from '../icons/LogoIcon';
 import Link from 'next/link';
@@ -110,6 +110,11 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
             <SidebarMenuItem>
               <NavLink href="/ai-analysis" icon={BrainCircuit} tooltip="AI Analysis">
                 AI Analysis
+              </NavLink>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <NavLink href="/research" icon={FlaskConical} tooltip="AI Research">
+                Research Assistant
               </NavLink>
             </SidebarMenuItem>
             {isAdmin && (
