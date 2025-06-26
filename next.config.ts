@@ -1,4 +1,4 @@
-
+import { SpeedInsights } from "@vercel/speed-insights/next"
 import type {NextConfig} from 'next';
 
 const nextConfig: NextConfig = {
