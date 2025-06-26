@@ -2,32 +2,33 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { Line, LineChart as RechartsLineChart, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from 'recharts';
-import { ChartConfig, ChartContainer, ChartTooltipContent } from "@/components/ui/chart";
+import { ChartContainer } from "@/components/ui/chart";
+import type { ChartConfig } from "@/components/ui/chart";
 import type { ChartDataPoint, AssetPair } from '@/lib/types';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { availableAssets } from '@/lib/types';
+import { Badge } from "@/components/ui/badge";
 
 const generateRandomData = (asset: AssetPair, numPoints = 30): ChartDataPoint[] => {
   const data: ChartDataPoint[] = [];
-  let value = asset.startsWith('BTC') ? 60000 : asset.startsWith('ETH') ? 3000 : 1.1; // Starting value based on asset
+  let value = asset.startsWith('BTC') ? 60000 : asset.startsWith('ETH') ? 3000 : 1.1;
   const now = new Date();
-  for (let i = numPoints -1; i >= 0; i--) {
-    const time = new Date(now.getTime() - i * 60 * 1000); // Data points per minute
+  for (let i = numPoints - 1; i >= 0; i--) {
+    const time = new Date(now.getTime() - i * 60 * 1000);
     data.push({ time: time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), value: parseFloat(value.toFixed(asset.includes('/') ? 4 : 2)) });
-    const change = (Math.random() - 0.48) * (value * 0.002); // Smaller, more frequent changes
+    const change = (Math.random() - 0.48) * (value * 0.002);
     value += change;
-    if (value < 0) value = 0.01; // Prevent negative prices
+    if (value < 0) value = 0.01;
   }
   return data;
 };
-
 
 export function PriceChart() {
   const [selectedAsset, setSelectedAsset] = useState<AssetPair>('BTC/USD');
   const [chartData, setChartData] = useState<ChartDataPoint[]>(generateRandomData(selectedAsset));
 
-  const chartConfig = useMemo<ChartConfig>(() => ({
+  const chartConfig: ChartConfig = useMemo(() => ({
     price: {
       label: selectedAsset,
       color: "hsl(var(--accent))",
@@ -35,23 +36,23 @@ export function PriceChart() {
   }), [selectedAsset]);
 
   useEffect(() => {
-    setChartData(generateRandomData(selectedAsset)); // Initial data for selected asset
-    
+    setChartData(generateRandomData(selectedAsset));
+
     const interval = setInterval(() => {
       setChartData(prevData => {
         const newDataPointTime = new Date();
         let newValue = prevData.length > 0 ? prevData[prevData.length - 1].value : (selectedAsset.startsWith('BTC') ? 60000 : selectedAsset.startsWith('ETH') ? 3000 : 1.1);
-        const change = (Math.random() - 0.48) * (newValue * 0.001); // Smaller, more frequent changes
+        const change = (Math.random() - 0.48) * (newValue * 0.001);
         newValue += change;
         if (newValue < 0) newValue = 0.01;
 
         const newData = [
-          ...prevData.slice(1), // Remove the oldest data point
+          ...prevData.slice(1),
           { time: newDataPointTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), value: parseFloat(newValue.toFixed(selectedAsset.includes('/') ? 4 : 2)) }
         ];
         return newData;
       });
-    }, 2000); // Update every 2 seconds
+    }, 2000);
 
     return () => clearInterval(interval);
   }, [selectedAsset]);
@@ -59,16 +60,15 @@ export function PriceChart() {
   const handleAssetChange = (value: string) => {
     setSelectedAsset(value as AssetPair);
   };
-  
+
   const yAxisDomain = useMemo(() => {
     if (chartData.length === 0) return ['auto', 'auto'];
     const values = chartData.map(d => d.value);
     const min = Math.min(...values);
     const max = Math.max(...values);
-    const padding = (max - min) * 0.1; // 10% padding
+    const padding = (max - min) * 0.1;
     return [Math.max(0, min - padding), max + padding];
   }, [chartData]);
-
 
   return (
     <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300 col-span-1 md:col-span-2 lg:col-span-3">
@@ -117,7 +117,6 @@ export function PriceChart() {
               />
               <Tooltip 
                 cursor={{stroke: "hsl(var(--border))", strokeWidth: 1, strokeDasharray: "3 3"}}
-                content={<ChartTooltipContent indicator="dot" hideLabel />} 
               />
               <Legend />
               <Line 
@@ -127,7 +126,7 @@ export function PriceChart() {
                 strokeWidth={2} 
                 dot={false} 
                 activeDot={{ r: 6, style: { fill: "var(--color-price)", opacity: 0.8 } }}
-                name={chartConfig.price.label}
+                name={String(chartConfig.price.label) || ""}
                 animationDuration={300}
               />
             </RechartsLineChart>
